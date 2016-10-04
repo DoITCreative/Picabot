@@ -122,7 +122,7 @@ class PicabotApp(App):
             )
        
 
-        floatl = FloatLayout(padding=(10,0,0,10),size_hint(None,None))
+        floatl = FloatLayout(padding=(10,0,0,10))
         bbfImg=Image(
                 source='pics/bottom_bar_filled.png',
                 size_hint=(1,0.2),
