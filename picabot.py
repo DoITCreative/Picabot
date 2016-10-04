@@ -13,12 +13,15 @@ from kivy.uix.label import Label
 
 class PicabotApp(App):
     def build(self):
+        Config.set('input','mouse','mouse,multitouch_on_demand')
         Config.set('graphics','resizable',0)
         Config.set('graphics','width',800)
         Config.set('graphics','height',600)
 
         boxl=BoxLayout(
-                orientation="vertical"
+                orientation="vertical",
+                padding=(0,0,0,10),
+                size_hint=(1,1)
                 )
         picaimg=Image(
                 source='pics/titlebar.png',
