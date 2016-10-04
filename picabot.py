@@ -178,11 +178,33 @@ class PicabotApp(App):
         boxl.add_widget(floatl)
         floatl.add_widget(bbufImg)
         floatl.add_widget(bbfImg)
-
+# Button binding bellow
+        bProxie.bind(on_press=self.bProxieOnClick)
+        bAccounts.bind(on_press=self.bAccontsOnClick)
+        bId.bind(on_press=self.bIdOnClick)
+        bHelp.bind(on_press=self.bHelpOnClick)
+        bLove.bind(on_press=self.bLoveOnClick)
+        bHate.bind(on_press=self.bHateOnClick)
+        bCookie.bind(on_press=self.bCookieOnClick)
 
 
         return boxl
 
+    def bProxieOnClick(self,obj):
+        print("Proxie")
+    def bAccontsOnClick(self,obj):
+        print("Accounts")
+    def bIdOnClick(self,obj):
+        print("ID")
+
+    def bHelpOnClick(self,obj):
+        print("help")
+    def bLoveOnClick(self,obj):
+        print("love")
+    def bHateOnClick(self,obj):
+        print("hate")
+    def bCookieOnClick(self,obj):
+        print("cookie")
 
 if __name__ == "__main__":
     PicabotApp().run()
