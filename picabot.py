@@ -51,15 +51,23 @@ kv="""
             BoxLayout:
                 orientation:'vertical'
                 Label:
+                    opacity:0
+                    id:lDone1
                     text:'[color=69d369]Filled[/color]'
                     markup:True
                 Label:
+                    opacity:0
+                    id:lDone2
                     text:'[color=69d369]Filled[/color]'
                     markup:True
                 Label:
+                    opacity:0
+                    id:lDone3
                     text:'[color=69d369]Filled[/color]'
                     markup:True
             Image:
+                id:iHelp
+                opacity:0
                 source:'pics/help.png'
                 size_hint:1.5,1.5
                 pos_hint:{'top':1,'bottom':.9}
@@ -96,6 +104,7 @@ kv="""
             pos_hint:{'center_x':.5,'center_y':.5}
             size_hint:.15,1
         Label:
+            id:lOut
             text:'[color=69d369]Fill the fields[/color]'
             markup:True
             pos_hint:{'center_x':.5}
@@ -117,18 +126,30 @@ class ContainerBox(BoxLayout):
 
     def bProxieOnClick(self):
         print("Proxie")
+        self.ids.lDone1.opacity=1
     def bAccontsOnClick(self):
         print("Accounts")
+        self.ids.lDone2.opacity=1
     def bIdOnClick(self):
         print("ID")
+        self.ids.lDone3.opacity=1
     def bHelpOnClick(self):
         print("help")
+        if (self.ids.iHelp.opacity==1):
+            self.ids.iHelp.opacity=0
+        else:
+            self.ids.iHelp.opacity=1
+
     def bLoveOnClick(self):
         print("love")
     def bHateOnClick(self):
         print("hate")
     def bCookieOnClick(self):
         print("cookie")
+
+class Engine:
+    def __init__(self, **kwargs):
+        print ("Start of the program")
 
 class PicabotApp(App):
     
