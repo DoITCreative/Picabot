@@ -8,11 +8,15 @@ from kivy.uix.label import Label
 from kivy.config import Config
 from kivy.uix.image import Image
 from kivy.uix.label import Label
+from kivy.uix.progressbar import ProgressBar
 
 
 
 class PicabotApp(App):
+    
     def build(self):
+
+
         Config.set('input','mouse','mouse,multitouch_on_demand')
         Config.set('graphics','resizable',0)
         Config.set('graphics','width',800)
@@ -21,12 +25,13 @@ class PicabotApp(App):
         boxl=BoxLayout(
                 orientation="vertical",
                 padding=(0,0,0,10),
+                spacing=15,
                 size_hint=(1,1)
                 )
         picaimg=Image(
                 source='pics/titlebar.png',
                 allow_stretch='true',
-                size_hint=(1,1),
+                size_hint=(1,0.45)
                 )
         boxl1=BoxLayout(
                 orientation='horizontal',
@@ -120,22 +125,31 @@ class PicabotApp(App):
             background_down='pics/cookie_pressed.png',
             background_normal='pics/cookie.png',
             text='',
-            size_hint=(.13,1),
-            pos_hint={'center_x':0.5}
+            pos_hint={
+                'center_x':0.5,
+                'center_y':0.5
+                },
+            size_hint=(0.15,1)
             )
        
+        lProgress = Label (
+                    text='[color=69d369]Fill the fields[/color]',
+                    markup='true',
+                    pos_hint={
+                        'center_x':0.5
+                        },
+                    size_hint=(0.1,0.1)
+                    )
+        pBar = ProgressBar(
+                max=100,
+                background_color=(0,255,0,255),
+                pos_hint={
+                    'center_x':0.5
+                    },
+                size_hint=(0.7,0.3)
+                )
 
-        floatl = FloatLayout(padding=(10,0,0,10))
-        bbfImg=Image(
-                source='pics/bottom_bar_filled.png',
-                size_hint=(1,0.2),
-                pos_hint={'center_x':0.5}
-                )
-        bbufImg=Image(
-                source='pics/bottom_bar_unfilled.png',
-                size_hint=(1,0.2),
-                pos_hint={'center_x':0.5}
-                )
+        pBar.value=75
 
 #boxl vert
 #   picabotlogo
@@ -154,10 +168,8 @@ class PicabotApp(App):
 #       love
 #       hate
 #   cookie
-#   floatl
-#       line
-#       linegreen
-
+#   label
+#   pBar
 
         boxl.add_widget(picaimg)
         boxl.add_widget(boxl1)
@@ -175,10 +187,10 @@ class PicabotApp(App):
         boxl4.add_widget(bLove)
         boxl4.add_widget(bHate)
         boxl.add_widget(bCookie)
-        boxl.add_widget(floatl)
-        floatl.add_widget(bbufImg)
-        floatl.add_widget(bbfImg)
-# Button binding bellow
+        boxl.add_widget(lProgress)
+        boxl.add_widget(pBar)
+
+# Button bindings bellow
         bProxie.bind(on_press=self.bProxieOnClick)
         bAccounts.bind(on_press=self.bAccontsOnClick)
         bId.bind(on_press=self.bIdOnClick)
