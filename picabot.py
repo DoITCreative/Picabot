@@ -14,10 +14,6 @@ import sys
 import time
 import random
 
-postid="4526079"
-likeornot="1"
-loginfilepath="logins.txt"
-proxyfilepath="proxies.txt"
 
 kv="""
 <MainMenu>
@@ -127,6 +123,17 @@ kv="""
 """
 Builder.load_string(kv)
 
+
+
+postid="4526079"
+likeornot="1"
+loginfilepath="logins.txt"
+proxyfilepath="proxies.txt"
+proxiesFilled=0
+accountFilled=0
+idFilled=0
+choiceFilled=0
+
 class MainMenu(BoxLayout):
     def __init__(self, **kwargs):
         Config.set('input','mouse','mouse,multitouch_on_demand')
@@ -136,10 +143,16 @@ class MainMenu(BoxLayout):
         super(MainMenu, self).__init__(**kwargs)
 
     def bProxieOnClick(self):
+        global proxiesFilled
+        proxiesFilled=1
         self.ids.lDone1.opacity=1
     def bAccontsOnClick(self):
+        global accountFilled
+        accountFilled=1
         self.ids.lDone2.opacity=1
     def bIdOnClick(self):
+        global idFilled
+        idFilled=1
         self.ids.lDone3.opacity=1
     def bHelpOnClick(self):
         if (self.ids.iHelp.opacity==1):
@@ -148,47 +161,57 @@ class MainMenu(BoxLayout):
             self.ids.iHelp.opacity=1
 
     def bLoveOnClick(self):
+        global choiceFilled
+        global likeornot
+        choiceFilled=1
         likeornot="1"
         self.ids.lOut.text="[color=69d369]Selected option: Love[/color]"
     def bHateOnClick(self):
+        global choiceFilled
+        global likeornot
+        choiceFilled=1
         likeornot="-1"
         self.ids.lOut.text="[color=69d369]Selected option: Hate[/color]"
     def bCookieOnClick(self):
-        loginfile = open(loginfilepath,'r')
-        proxyfile = open(proxyfilepath,'r')
-        logins=[]
-        passwords=[]
-        proxys=[]
-        proxystype=[]
-        count=0
-        loginsnum=0
-        proxysnum=0
+        if (proxiesFilled+accountFilled+idFilled+choiceFilled==4):
+            loginfile = open(loginfilepath,'r')
+            proxyfile = open(proxyfilepath,'r')
+            logins=[]
+            passwords=[]
+            proxys=[]
+            proxystype=[]
+            count=0
+            loginsnum=0
+            proxysnum=0
 
-        for line in loginfile:
-            s = line
-            s1,s2 = s.split(':')
-            logins.append(s1)
-            passwords.append(s2[:-1])
-        for line in proxyfile:
-            s = line
-            s1,s2 = s.split()
-            proxystype.append(s1)
-            proxys.append(s2[:-1])
-        for line in logins:
-            loginsnum=loginsnum+1
-        for line in proxys:
-            proxysnum=proxysnum+1
-        if proxysnum>=loginsnum:
-            count=loginsnum
+            for line in loginfile:
+                s = line
+                s1,s2 = s.split(':')
+                logins.append(s1)
+                passwords.append(s2[:-1])
+            for line in proxyfile:
+                s = line
+                s1,s2 = s.split()
+                proxystype.append(s1)
+                proxys.append(s2[:-1])
+            for line in logins:
+                loginsnum=loginsnum+1
+            for line in proxys:
+                proxysnum=proxysnum+1
+            if proxysnum>=loginsnum:
+                count=loginsnum
+            else:
+                count=proxysnum
+            self.ids.pBar.max=count
+            self.ids.pBar.value=0
+            for k in range(0,count):
+#                sendreq(logins[k],passwords[k],str(postid),proxystype[k],proxys[k],str(likeornot))
+                print(logins[k],passwords[k],str(postid),proxystype[k],proxys[k],str(likeornot))
+                self.ids.pBar.value=self.ids.pBar.value+1
+                time.sleep(random.random()+int(random.random()*2)+1)
+            self.ids.lOut.text="[color=69d369]Done![/color]"
         else:
-            count=proxysnum
-        self.ids.pBar.max=count
-        self.ids.pBar.value=0
-        for k in range(0,count):
-#            sendreq(logins[k],passwords[k],str(postid),proxystype[k],proxys[k],str(likeornot))
-            self.ids.pBar.value=self.ids.pBar.value+1
-            time.sleep(random.random()+int(random.random()*2)+1)
-        self.ids.lOut.text="[color=69d369]Done![/color]"
+            self.ids.lOut.text="[color=69d369]You must fill all the fields before pressing it[/color]"
 
     def sendreq(login, password, storyid, proxytype, proxy, vote):
         mproxies = {
