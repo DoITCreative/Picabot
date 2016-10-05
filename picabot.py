@@ -14,7 +14,6 @@ import sys
 import time
 import random
 
-
 kv="""
 <MainMenu>
     BoxLayout:
@@ -123,8 +122,6 @@ kv="""
 """
 Builder.load_string(kv)
 
-
-
 postid="4526079"
 likeornot="1"
 loginfilepath="logins.txt"
@@ -157,8 +154,10 @@ class MainMenu(BoxLayout):
     def bHelpOnClick(self):
         if (self.ids.iHelp.opacity==1):
             self.ids.iHelp.opacity=0
+            self.ids.lOut.text="[color=69d369]Help is hidden now[/color]"
         else:
             self.ids.iHelp.opacity=1
+            self.ids.lOut.text="[color=69d369]Help is shown now[/color]"
 
     def bLoveOnClick(self):
         global choiceFilled
