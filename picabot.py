@@ -10,12 +10,10 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.textinput import TextInput
-
 import requests
 import sys
 import time
 import random
-
 kv="""
 <Manager>:
     id:myManager
@@ -201,7 +199,6 @@ kv="""
                 size_hint:.1,.1
 """
 Builder.load_string(kv)
-
 postid=""
 likeornot=""
 loginfilepath=""
@@ -210,7 +207,6 @@ proxiesFilled=0
 accountFilled=0
 idFilled=0
 choiceFilled=0
-
 class MainMenu(Screen):
     def bProxieOnClick(self):
         self.manager.current="Your proxy"
@@ -225,7 +221,6 @@ class MainMenu(Screen):
         else:
             self.ids.iHelp.opacity=1
             self.ids.lOut.text="[color=69d369]Help is shown now.[/color]"
-
     def bLoveOnClick(self):
         global choiceFilled
         global likeornot
@@ -240,45 +235,48 @@ class MainMenu(Screen):
         self.ids.lOut.text="[color=69d369]Selected option: Hate.[/color]"
     def bCookieOnClick(self):
         if (proxiesFilled+accountFilled+idFilled+choiceFilled==4):
-            loginfile = open(loginfilepath,'r')
-            proxyfile = open(proxyfilepath,'r')
-            logins=[]
-            passwords=[]
-            proxys=[]
-            proxystype=[]
-            count=0
-            loginsnum=0
-            proxysnum=0
 
-            for line in loginfile:
-                s = line
-                s1,s2 = s.split(':')
-                logins.append(s1)
-                passwords.append(s2[:-1])
-            for line in proxyfile:
-                s = line
-                s1,s2 = s.split()
-                proxystype.append(s1)
-                proxys.append(s2[:-1])
-            for line in logins:
-                loginsnum=loginsnum+1
-            for line in proxys:
-                proxysnum=proxysnum+1
-            if proxysnum>=loginsnum:
-                count=loginsnum
+            try:
+                loginfile = open(loginfilepath,'r')
+                proxyfile = open(proxyfilepath,'r')
+            except:
+                self.ids.lOut.text="[color=69d369]Check your data.[/color]"
             else:
-                count=proxysnum
-            self.ids.pBar.max=count
-            self.ids.pBar.value=0
-            for k in range(0,count):
-#                sendreq(logins[k],passwords[k],str(postid),proxystype[k],proxys[k],str(likeornot))
-                print(logins[k],passwords[k],str(postid),proxystype[k],proxys[k],str(likeornot))
-                self.ids.pBar.value=self.ids.pBar.value+1
-                time.sleep(random.random()+int(random.random()*2)+1)
-            self.ids.lOut.text="[color=69d369]Done![/color]"
+                logins=[]
+                passwords=[]
+                proxys=[]
+                proxystype=[]
+                count=0
+                loginsnum=0
+                proxysnum=0
+                for line in loginfile:
+                    s = line
+                    s1,s2 = s.split(':')
+                    logins.append(s1)
+                    passwords.append(s2[:-1])
+                for line in proxyfile:
+                    s = line
+                    s1,s2 = s.split()
+                    proxystype.append(s1)
+                    proxys.append(s2[:-1])
+                for line in logins:
+                    loginsnum=loginsnum+1
+                for line in proxys:
+                    proxysnum=proxysnum+1
+                if proxysnum>=loginsnum:
+                    count=loginsnum
+                else:
+                    count=proxysnum
+                self.ids.pBar.max=count
+                self.ids.pBar.value=0
+                for k in range(0,count):
+#                    sendreq(logins[k],passwords[k],str(postid),proxystype[k],proxys[k],str(likeornot))
+                    print(logins[k],passwords[k],str(postid),proxystype[k],proxys[k],str(likeornot))
+                    self.ids.pBar.value=self.ids.pBar.value+1
+                    time.sleep(random.random()+int(random.random()*2)+1)
+                self.ids.lOut.text="[color=69d369]Done![/color]"
         else:
             self.ids.lOut.text="[color=69d369]You must fill all the fields before pressing it![/color]"
-
     def sendreq(login, password, storyid, proxytype, proxy, vote):
         mproxies = {
                 proxytype : proxytype+"://"+proxy
@@ -325,7 +323,6 @@ class MainMenu(Screen):
         else:
             r1 = requests.post("http://pikabu.ru/ajax/vote_story.php", data=m2data, headers=mheaders, cookies=m2cookies) 
         return 
-
 class Manager(ScreenManager):
     def __init__(self, **kwargs):
         Config.set('input','mouse','mouse,multitouch_on_demand')
@@ -370,10 +367,8 @@ class SelectionMenu3(Screen):
             self.manager.ids.main_menu.ids.lDone3.opacity=0
         self.manager.current="Picabot"
 class PicabotApp(App):
-    
     def build(self):
         return Manager()
-
 if __name__ == "__main__":
     PicabotApp().run()
 
