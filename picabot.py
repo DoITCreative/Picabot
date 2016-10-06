@@ -143,6 +143,7 @@ kv="""
             size_hint:.1,.1
             pos_hint:{'center_x':0.2,'center_y':.8}
         TextInput:
+            id:tProxy
             multiline:False
             size_hint:.6,.05
             pos_hint:{'center_x':0.5,'center_y':.5}
@@ -150,7 +151,7 @@ kv="""
             orientation:'horizontal'
             Button:
                 text:"Confirm"
-                on_press:root.manager.current="Picabot"
+                on_press:root.bConfirmOnClick()
                 size_hint:.1,.1
             Button:
                 text:"Cancel"
@@ -159,10 +160,11 @@ kv="""
 <SelectionMenu2>:
     FloatLayout:
         Label:
-            text:"Select path to your Login file:"
+            text:"Select path to your file with Accounts:"
             size_hint:.1,.1
             pos_hint:{'center_x':0.2,'center_y':.8}
         TextInput:
+            id:tAccounts
             multiline:False
             size_hint:.6,.05
             pos_hint:{'center_x':0.5,'center_y':.5}
@@ -170,7 +172,7 @@ kv="""
             orientation:'horizontal'
             Button:
                 text:"Confirm"
-                on_press:root.manager.current="Picabot"
+                on_press:root.bConfirmOnClick()
                 size_hint:.1,.1
             Button:
                 text:"Cancel"
@@ -183,6 +185,7 @@ kv="""
             size_hint:.1,.1
             pos_hint:{'center_x':0.2,'center_y':.8}
         TextInput:
+            id:tId
             multiline:False
             size_hint:.6,.05
             pos_hint:{'center_x':0.5,'center_y':.5}
@@ -190,21 +193,19 @@ kv="""
             orientation:'horizontal'
             Button:
                 text:"Confirm"
-                on_press:root.manager.current="Picabot"
+                on_press:root.bConfirmOnClick()
                 size_hint:.1,.1
             Button:
                 text:"Cancel"
                 on_press:root.manager.current="Picabot"
                 size_hint:.1,.1
-
-
 """
 Builder.load_string(kv)
 
-postid="4526079"
-likeornot="1"
-loginfilepath="logins.txt"
-proxyfilepath="proxies.txt"
+postid=""
+likeornot=""
+loginfilepath=""
+proxyfilepath=""
 proxiesFilled=0
 accountFilled=0
 idFilled=0
@@ -212,19 +213,10 @@ choiceFilled=0
 
 class MainMenu(Screen):
     def bProxieOnClick(self):
-        global proxiesFilled
-        proxiesFilled=1
-        self.ids.lDone1.opacity=1
         self.manager.current="Your proxy"
     def bAccontsOnClick(self):
-        global accountFilled
-        accountFilled=1
-        self.ids.lDone2.opacity=1
         self.manager.current="Your account"
     def bIdOnClick(self):
-        global idFilled
-        idFilled=1
-        self.ids.lDone3.opacity=1
         self.manager.current="Your id"
     def bHelpOnClick(self):
         if (self.ids.iHelp.opacity==1):
@@ -342,11 +334,41 @@ class Manager(ScreenManager):
         Config.set('graphics','height',600)
         super(Manager, self).__init__(**kwargs)
 class SelectionMenu1(Screen):
-    pass
+    def bConfirmOnClick(self):
+        global proxyfilepath
+        global proxiesFilled
+        proxyfilepath=self.ids.tProxy.text
+        if proxyfilepath!="":
+            proxiesFilled=1
+            self.manager.ids.main_menu.ids.lDone1.opacity=1
+        else:
+            proxiesFilled=0
+            self.manager.ids.main_menu.ids.lDone1.opacity=0
+        self.manager.current="Picabot"
 class SelectionMenu2(Screen):
-    pass
+    def bConfirmOnClick(self):
+        global loginfilepath
+        global accountFilled
+        loginfilepath=self.ids.tAccounts.text
+        if loginfilepath!="":
+            accountFilled=1
+            self.manager.ids.main_menu.ids.lDone2.opacity=1
+        else:
+            accountFilled=0
+            self.manager.ids.main_menu.ids.lDone2.opacity=0
+        self.manager.current="Picabot"
 class SelectionMenu3(Screen):
-    pass
+    def bConfirmOnClick(self):
+        global postid
+        global idFilled
+        postid=self.ids.tId.text
+        if postid!="":
+            idFilled=1
+            self.manager.ids.main_menu.ids.lDone3.opacity=1
+        else:
+            idFilled=0
+            self.manager.ids.main_menu.ids.lDone3.opacity=0
+        self.manager.current="Picabot"
 class PicabotApp(App):
     
     def build(self):
