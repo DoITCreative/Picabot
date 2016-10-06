@@ -9,6 +9,7 @@ from kivy.uix.image import Image
 from kivy.uix.progressbar import ProgressBar
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.textinput import TextInput
 
 import requests
 import sys
@@ -22,11 +23,15 @@ kv="""
         manager:myManager
         id:main_menu
         name:"Picabot"
-    SelectionMenu:
-        id:selection_menu
+    SelectionMenu1:
         manager:myManager
-        name:"Your selection"
-
+        name:"Your proxy"
+    SelectionMenu2:
+        manager:myManager
+        name:"Your account"
+    SelectionMenu3:
+        manager:myManager
+        name:"Your id"
 <MainMenu>:
     BoxLayout:
         orientation:'vertical'
@@ -131,11 +136,68 @@ kv="""
             max:100
             pos_hint:{'center_x':.5}
             size_hint:.7,.3
-<SelectionMenu>:
-    BoxLayout:
-        Button:
-            text:"Hello, page2"
-            on_press:root.manager.current="Picabot"
+<SelectionMenu1>:
+    FloatLayout:
+        Label:
+            text:"Select path to your Proxy file:"
+            size_hint:.1,.1
+            pos_hint:{'center_x':0.2,'center_y':.8}
+        TextInput:
+            multiline:False
+            size_hint:.6,.05
+            pos_hint:{'center_x':0.5,'center_y':.5}
+        BoxLayout:
+            orientation:'horizontal'
+            Button:
+                text:"Confirm"
+                on_press:root.manager.current="Picabot"
+                size_hint:.1,.1
+            Button:
+                text:"Cancel"
+                on_press:root.manager.current="Picabot"
+                size_hint:.1,.1
+<SelectionMenu2>:
+    FloatLayout:
+        Label:
+            text:"Select path to your Login file:"
+            size_hint:.1,.1
+            pos_hint:{'center_x':0.2,'center_y':.8}
+        TextInput:
+            multiline:False
+            size_hint:.6,.05
+            pos_hint:{'center_x':0.5,'center_y':.5}
+        BoxLayout:
+            orientation:'horizontal'
+            Button:
+                text:"Confirm"
+                on_press:root.manager.current="Picabot"
+                size_hint:.1,.1
+            Button:
+                text:"Cancel"
+                on_press:root.manager.current="Picabot"
+                size_hint:.1,.1
+<SelectionMenu3>:
+    FloatLayout:
+        Label:
+            text:"Select ID of the quote:"
+            size_hint:.1,.1
+            pos_hint:{'center_x':0.2,'center_y':.8}
+        TextInput:
+            multiline:False
+            size_hint:.6,.05
+            pos_hint:{'center_x':0.5,'center_y':.5}
+        BoxLayout:
+            orientation:'horizontal'
+            Button:
+                text:"Confirm"
+                on_press:root.manager.current="Picabot"
+                size_hint:.1,.1
+            Button:
+                text:"Cancel"
+                on_press:root.manager.current="Picabot"
+                size_hint:.1,.1
+
+
 """
 Builder.load_string(kv)
 
@@ -153,15 +215,17 @@ class MainMenu(Screen):
         global proxiesFilled
         proxiesFilled=1
         self.ids.lDone1.opacity=1
-        self.manager.current="Your selection"
+        self.manager.current="Your proxy"
     def bAccontsOnClick(self):
         global accountFilled
         accountFilled=1
         self.ids.lDone2.opacity=1
+        self.manager.current="Your account"
     def bIdOnClick(self):
         global idFilled
         idFilled=1
         self.ids.lDone3.opacity=1
+        self.manager.current="Your id"
     def bHelpOnClick(self):
         if (self.ids.iHelp.opacity==1):
             self.ids.iHelp.opacity=0
@@ -277,9 +341,12 @@ class Manager(ScreenManager):
         Config.set('graphics','width',800)
         Config.set('graphics','height',600)
         super(Manager, self).__init__(**kwargs)
-class SelectionMenu(Screen):
+class SelectionMenu1(Screen):
     pass
-
+class SelectionMenu2(Screen):
+    pass
+class SelectionMenu3(Screen):
+    pass
 class PicabotApp(App):
     
     def build(self):
