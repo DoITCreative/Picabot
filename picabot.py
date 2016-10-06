@@ -12,7 +12,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.textinput import TextInput
 import requests
 import sys
-import time
+import time, threading
 import random
 kv="""
 <Manager>:
@@ -97,7 +97,7 @@ kv="""
                 background_normal:'pics/small_button_unpressed.png'
                 text:'[color=000000][b][size=30]?[/size][/b][/color]'
                 markup:True
-                size_hint:.25,.55
+                size_hint:.30,.55
                 pos_hint:{'top':1,'right':0}
         BoxLayout:
             orientation:'horizontal'
@@ -122,18 +122,13 @@ kv="""
             background_down:'pics/cookie_pressed.png'
             background_normal:'pics/cookie.png'
             pos_hint:{'center_x':.5,'center_y':.5}
-            size_hint:.15,1
+            size_hint:.16,1
         Label:
             id:lOut
             text:'[color=69d369]Fill the fields.[/color]'
             markup:True
             pos_hint:{'center_x':.5}
             size_hint:.1,.1
-        ProgressBar:
-            id:pBar
-            max:100
-            pos_hint:{'center_x':.5}
-            size_hint:.7,.3
 <SelectionMenu1>:
     FloatLayout:
         Label:
@@ -145,6 +140,9 @@ kv="""
             multiline:False
             size_hint:.6,.05
             pos_hint:{'center_x':0.5,'center_y':.5}
+        Label:
+            text:'Proxy file should have this info in it: \\n<proxy type> <proxy ip>:<port>\\nexample:\\nhttps 1.179.201.18:3128'
+            pos_hint:{'center_x':0.2,'center_y':.3}
         BoxLayout:
             orientation:'horizontal'
             Button:
@@ -159,6 +157,7 @@ kv="""
                 text:"Cancel"
                 on_press:root.manager.current="Picabot"
                 size_hint:.1,.1
+
 <SelectionMenu2>:
     FloatLayout:
         Label:
@@ -170,6 +169,9 @@ kv="""
             multiline:False
             size_hint:.6,.05
             pos_hint:{'center_x':0.5,'center_y':.5}
+        Label:
+            text:'Login file should have this info in it:\\n<login>:<password>\\nExample:\\nEpicNagibator:sheeeeeeps'
+            pos_hint:{'center_x':0.2,'center_y':.3}
         BoxLayout:
             orientation:'horizontal'
             Button:
@@ -195,6 +197,9 @@ kv="""
             multiline:False
             size_hint:.6,.05
             pos_hint:{'center_x':0.5,'center_y':.5}
+        Label:
+            text:'Quote ID can be found in the quote address:\\nExample:\\nAddress: http://pikabu.ru/story/reshil_proverit_na_shizofreniyu_4527119\\nID: 4527119'
+            pos_hint:{'center_x':0.4,'center_y':.3}
         BoxLayout:
             orientation:'horizontal'
             Button:
@@ -206,7 +211,9 @@ kv="""
                 on_press:root.manager.current="Picabot"
                 size_hint:.1,.1
 """
+
 Builder.load_string(kv)
+
 postid=""
 likeornot=""
 loginfilepath=""
@@ -243,7 +250,6 @@ class MainMenu(Screen):
         self.ids.lOut.text="[color=69d369]Selected option: Hate.[/color]"
     def bCookieOnClick(self):
         if (proxiesFilled+accountFilled+idFilled+choiceFilled==4):
-
             try:
                 loginfile = open(loginfilepath,'r')
                 proxyfile = open(proxyfilepath,'r')
@@ -275,19 +281,16 @@ class MainMenu(Screen):
                     count=loginsnum
                 else:
                     count=proxysnum
-                self.ids.pBar.max=count
-                self.ids.pBar.value=0
                 for k in range(0,count):
-#                    sendreq(logins[k],passwords[k],str(postid),proxystype[k],proxys[k],str(likeornot))
                     print(logins[k],passwords[k],str(postid),proxystype[k],proxys[k],str(likeornot))
-                    self.ids.pBar.value=self.ids.pBar.value+1
+                    self.sendreq(logins[k],passwords[k],str(postid),proxystype[k],proxys[k],str(likeornot))
                     time.sleep(random.random()+int(random.random()*2)+1)
                 self.ids.lOut.text="[color=69d369]Done![/color]"
         else:
             self.ids.lOut.text="[color=69d369]You must fill all the fields before pressing it![/color]"
-    def sendreq(login, password, storyid, proxytype, proxy, vote):
+    def sendreq(self,login, password, storyid, proxytype, proxy, vote):
         mproxies = {
-                proxytype : proxytype+"://"+proxy
+                "https" : proxytype+"://"+proxy
                 }
         mheaders = {
                 'Host':'pikabu.ru',
