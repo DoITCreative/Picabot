@@ -8,6 +8,7 @@ from kivy.config import Config
 from kivy.uix.image import Image
 from kivy.uix.progressbar import ProgressBar
 from kivy.lang import Builder
+from kivy.uix.screenmanager import ScreenManager, Screen
 
 import requests
 import sys
@@ -15,7 +16,18 @@ import time
 import random
 
 kv="""
-<MainMenu>
+<Manager>:
+    id:myManager
+    MainMenu:
+        manager:myManager
+        id:main_menu
+        name:"Picabot"
+    SelectionMenu:
+        id:selection_menu
+        manager:myManager
+        name:"Your selection"
+
+<MainMenu>:
     BoxLayout:
         orientation:'vertical'
         padding:0,0,0,10
@@ -119,6 +131,11 @@ kv="""
             max:100
             pos_hint:{'center_x':.5}
             size_hint:.7,.3
+<SelectionMenu>:
+    BoxLayout:
+        Button:
+            text:"Hello, page2"
+            on_press:root.manager.current="Picabot"
 """
 Builder.load_string(kv)
 
@@ -131,18 +148,12 @@ accountFilled=0
 idFilled=0
 choiceFilled=0
 
-class MainMenu(BoxLayout):
-    def __init__(self, **kwargs):
-        Config.set('input','mouse','mouse,multitouch_on_demand')
-        Config.set('graphics','resizable',0)
-        Config.set('graphics','width',800)
-        Config.set('graphics','height',600)
-        super(MainMenu, self).__init__(**kwargs)
-
+class MainMenu(Screen):
     def bProxieOnClick(self):
         global proxiesFilled
         proxiesFilled=1
         self.ids.lDone1.opacity=1
+        self.manager.current="Your selection"
     def bAccontsOnClick(self):
         global accountFilled
         accountFilled=1
@@ -259,10 +270,20 @@ class MainMenu(BoxLayout):
             r1 = requests.post("http://pikabu.ru/ajax/vote_story.php", data=m2data, headers=mheaders, cookies=m2cookies) 
         return 
 
+class Manager(ScreenManager):
+    def __init__(self, **kwargs):
+        Config.set('input','mouse','mouse,multitouch_on_demand')
+        Config.set('graphics','resizable',0)
+        Config.set('graphics','width',800)
+        Config.set('graphics','height',600)
+        super(Manager, self).__init__(**kwargs)
+class SelectionMenu(Screen):
+    pass
+
 class PicabotApp(App):
     
     def build(self):
-        return MainMenu()
+        return Manager()
 
 if __name__ == "__main__":
     PicabotApp().run()
