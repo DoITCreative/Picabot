@@ -152,6 +152,10 @@ kv="""
                 on_press:root.bConfirmOnClick()
                 size_hint:.1,.1
             Button:
+                text:"Use proxies.txt"
+                on_press:root.bDeffaultOnClick()
+                size_hint:.1,.1
+            Button:
                 text:"Cancel"
                 on_press:root.manager.current="Picabot"
                 size_hint:.1,.1
@@ -171,6 +175,10 @@ kv="""
             Button:
                 text:"Confirm"
                 on_press:root.bConfirmOnClick()
+                size_hint:.1,.1
+            Button:
+                text:"Use logins.txt"
+                on_press:root.bDeffaultOnClick()
                 size_hint:.1,.1
             Button:
                 text:"Cancel"
@@ -342,6 +350,13 @@ class SelectionMenu1(Screen):
             proxiesFilled=0
             self.manager.ids.main_menu.ids.lDone1.opacity=0
         self.manager.current="Picabot"
+    def bDeffaultOnClick(self):
+        global proxyfilepath
+        global proxiesFilled
+        proxyfilepath="proxies.txt"
+        proxiesFilled=1
+        self.manager.ids.main_menu.ids.lDone1.opacity=1
+        self.manager.current="Picabot"
 class SelectionMenu2(Screen):
     def bConfirmOnClick(self):
         global loginfilepath
@@ -353,6 +368,13 @@ class SelectionMenu2(Screen):
         else:
             accountFilled=0
             self.manager.ids.main_menu.ids.lDone2.opacity=0
+        self.manager.current="Picabot"
+    def bDeffaultOnClick(self):
+        global loginfilepath
+        global accountFilled
+        loginfilepath="logins.txt"
+        accountFilled=1
+        self.manager.ids.main_menu.ids.lDone2.opacity=1
         self.manager.current="Picabot"
 class SelectionMenu3(Screen):
     def bConfirmOnClick(self):
