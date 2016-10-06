@@ -110,7 +110,7 @@ kv="""
             size_hint:.15,1
         Label:
             id:lOut
-            text:'[color=69d369]Fill the fields[/color]'
+            text:'[color=69d369]Fill the fields.[/color]'
             markup:True
             pos_hint:{'center_x':.5}
             size_hint:.1,.1
@@ -154,23 +154,23 @@ class MainMenu(BoxLayout):
     def bHelpOnClick(self):
         if (self.ids.iHelp.opacity==1):
             self.ids.iHelp.opacity=0
-            self.ids.lOut.text="[color=69d369]Help is hidden now[/color]"
+            self.ids.lOut.text="[color=69d369]Help is hidden now.[/color]"
         else:
             self.ids.iHelp.opacity=1
-            self.ids.lOut.text="[color=69d369]Help is shown now[/color]"
+            self.ids.lOut.text="[color=69d369]Help is shown now.[/color]"
 
     def bLoveOnClick(self):
         global choiceFilled
         global likeornot
         choiceFilled=1
         likeornot="1"
-        self.ids.lOut.text="[color=69d369]Selected option: Love[/color]"
+        self.ids.lOut.text="[color=69d369]Selected option: Love.[/color]"
     def bHateOnClick(self):
         global choiceFilled
         global likeornot
         choiceFilled=1
         likeornot="-1"
-        self.ids.lOut.text="[color=69d369]Selected option: Hate[/color]"
+        self.ids.lOut.text="[color=69d369]Selected option: Hate.[/color]"
     def bCookieOnClick(self):
         if (proxiesFilled+accountFilled+idFilled+choiceFilled==4):
             loginfile = open(loginfilepath,'r')
@@ -210,7 +210,7 @@ class MainMenu(BoxLayout):
                 time.sleep(random.random()+int(random.random()*2)+1)
             self.ids.lOut.text="[color=69d369]Done![/color]"
         else:
-            self.ids.lOut.text="[color=69d369]You must fill all the fields before pressing it[/color]"
+            self.ids.lOut.text="[color=69d369]You must fill all the fields before pressing it![/color]"
 
     def sendreq(login, password, storyid, proxytype, proxy, vote):
         mproxies = {
